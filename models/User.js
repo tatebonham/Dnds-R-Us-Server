@@ -23,7 +23,7 @@ const SpellSchema = new mongoose.Schema({
     type: String
   },
   level: {
-    type: Integer
+    type: Number
   }
 }, {
   timestamps: true
@@ -49,33 +49,33 @@ const CharacterSchema = new mongoose.Schema({
     type: String
   }, 
   level: {
-    type: String
+    type: Number
   }, 
   strength: {
-    type: Integer
+    type: Number
   }, 
   dexterity: {
-    type: Integer
+    type: Number
   }, 
   constitution: {
-    type: Integer
+    type: Number
   }, 
   intelligence: {
-    type: Integer
+    type: Number
   }, 
   wisdom: {
-    type: Integer
+    type: Number
   }, 
   charisma: {
-    type: Integer
+    type: Number
   }, 
   proficiencies: [],
   features: [],
   maxhealth: {
-    type: Integer
+    type: Number
   }, 
   currenthealth: {
-    type: Integer
+    type: Number
   }, 
   attacks: [], 
   skills: [],
@@ -84,75 +84,75 @@ const CharacterSchema = new mongoose.Schema({
     type: String
   }, 
   currenthitdice: {
-    type: Integer
+    type: Number
   }, 
   temporaryhealth: {
-    type: Integer
+    type: Number
   }, 
   weapons: [WeaponSchema],
   spells: [SpellSchema],
   gold: {
-    type: Integer
+    type: Number
   }, 
   silver: {
-    type: Integer
+    type: Number
   }, 
   copper: {
-    type: Integer
+    type: Number
   }, 
   onetotal: {
-    type: Integer
+    type: Number
   }, 
   oneremaing: {
-    type: Integer
+    type: Number
   }, 
   twototal: {
-    type: Integer
+    type: Number
   }, 
   tworemaining: {
-    type: Integer
+    type: Number
   }, 
   threetotal: {
-    type: Integer
+    type: Number
   }, 
   threeremaining: {
-    type: Integer
+    type: Number
   }, 
   fourtotal: {
-    type: Integer
+    type: Number
   }, 
   fourremaining: {
-    type: Integer
+    type: Number
   }, 
   fivetotal: {
-    type: Integer
+    type: Number
   }, 
   fiveremaining: {
-    type: Integer
+    type: Number
   }, 
   sixtotal: {
-    type: Integer
+    type: Number
   }, 
   sixremaining: {
-    type: Integer
+    type: Number
   }, 
   seventotal: {
-    type: Integer
+    type: Number
   }, 
   sevenremaining: {
-    type: Integer
+    type: Number
   }, 
   eighttotal: {
-    type: Integer
+    type: Number
   }, 
   eightremaining: {
-    type: Integer
+    type: Number
   }, 
   ninetotal: {
-    type: Integer
+    type: Number
   }, 
   nineremaining: {
-    type: Integer
+    type: Number
   }, 
 }, {timestamps: true})
 

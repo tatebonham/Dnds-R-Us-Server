@@ -23,6 +23,9 @@ app.use(express.json())
 //     res.json({msg: 'Hello form the backend'})
 // })
 
+// controller
+app.use('/users', require('./controllers/users.js'))
+
 app.listen(PORT, () => {
     rowdyResults.print()
     console.log(`Port: ${PORT}`)
