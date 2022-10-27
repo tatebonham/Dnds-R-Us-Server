@@ -24,6 +24,9 @@ const SpellSchema = new mongoose.Schema({
   },
   level: {
     type: Number
+  },
+  note: {
+    type: String
   }
 }, {
   timestamps: true
@@ -154,6 +157,9 @@ const CharacterSchema = new mongoose.Schema({
   nineremaining: {
     type: Number
   }, 
+  img_url:{
+    type: String
+  }
 }, {timestamps: true})
 
 const UserSchema = new mongoose.Schema({

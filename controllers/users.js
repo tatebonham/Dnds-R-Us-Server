@@ -200,6 +200,7 @@ router.put("/characters/:characterId", authLockedRoute, async(req,res) => {
   }
 })
 
+// Post -- create a new weapon schema in character schema
 router.post("/characters/:characterId/weapons", authLockedRoute, async(req,res) => {
   try {
         const oneUser = await db.User.findOneAndUpdate({
@@ -219,20 +220,33 @@ router.post("/characters/:characterId/weapons", authLockedRoute, async(req,res) 
   }
 })
 
-// PUT /users/goals/:goalId/status -- update a goal status
-router.put("/goals/:goalId/status", authLockedRoute, async(req,res) => {
+// Put -- Edit a weapon schema
+router.put("/characters/:characterId/weapons/:weaponId", authLockedRoute, async(req,res) => {
   try {
-    const oneGoal = await db.User.findOneAndUpdate({
-          _id: res.locals.user._id, "goals._id": req.params.goalId
-      }, { $set: {
-        "goals.$.completed": req.body.completed
-      }
-      }, {
-        new: true
-      })
-  
-          res.json(oneGoal)
-  
+        const oneUser = await db.User.updateOne({
+            "_id": res.locals.user._id,
+            "characters": {
+              "$elemMatch": {
+                "_id": req.params.characterId,
+                "weapons._id": req.params.weaponId
+              }
+            }
+        }, { $set: {
+              "characters.$[outer].weapons.$[inner].name": req.body.name,
+              "weapons.$.damage": req.body.damage,
+              "weapons.$.type": req.body.type,
+              "weapons.$.note": req.body.note,
+              
+        }},{
+          "arrayFilters": [
+            {"outer._id": req.params.characterId},
+            {"inner._id": req.params.weaponId}
+          ]
+        })
+
+
+        res.json(oneUser)
+
       } catch(err) {
       console.log(err)
       return res.status(500).json({error: "Server Error"})        
