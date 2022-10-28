@@ -108,7 +108,7 @@ router.post('/login', async (req, res) => {
     }
 
     // sign jwt and send back
-    const token = await jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 3600 })
+    const token = await jwt.sign(payload, process.env.JWT_SECRET)
 
     res.json({ token })
   } catch(error) {
@@ -163,9 +163,10 @@ router.post("/characters", authLockedRoute, async(req,res) => {
 // GET /users/characters/:charactersId -- display a character
 router.get("/characters/:characterId", authLockedRoute, async(req,res) => {
   try {
-    const oneCharacter = await db.User.findOne({
+      const oneUser = await db.User.findOne({
           _id: res.locals.user._id, "characters._id": req.params.characterId
       })
+          const oneCharacter = oneUser.characters.id(req.params.characterId)
   
           res.json(oneCharacter)
   
@@ -185,8 +186,25 @@ router.put("/characters/:characterId", authLockedRoute, async(req,res) => {
         "characters.$.race": req.body.race,
         "characters.$.class": req.body.class,
         "characters.$.subclass": req.body.subclass,
+        "characters.$.alignment": req.body.alignment,
+        "characters.$.background": req.body.background,
         "characters.$.level": req.body.level,
-
+        "characters.$.strength": req.body.strength,
+        "characters.$.dexterity": req.body.dexterity,
+        "characters.$.constitution": req.body.constitution,
+        "characters.$.intelligence": req.body.intelligence,
+        "characters.$.wisdom": req.body.wisdom,
+        "characters.$.charisma": req.body.charisma,
+        "characters.$.img_url": req.body.img_url,
+        "characters.$.speed": req.body.speed,
+        "characters.$.armor": req.body.armor,
+        "characters.$.initiative": req.body.initiative,
+        "characters.$.inpiration": req.body.inpiration,
+        "characters.$.maxhealth": req.body.maxhealth,
+        "characters.$.temporaryhealth": req.body.temporaryhealth,
+        "characters.$.currenthealth": req.body.currenthealth,
+        "characters.$.totalhitdice": req.body.totalhitdice,
+        "characters.$.currenthitdice": req.body.currenthitdice,
       }
       }, {
         new: true
@@ -203,17 +221,20 @@ router.put("/characters/:characterId", authLockedRoute, async(req,res) => {
 // Post -- create a new weapon schema in character schema
 router.post("/characters/:characterId/weapons", authLockedRoute, async(req,res) => {
   try {
-        const oneUser = await db.User.findOneAndUpdate({
+        const oneUser = await db.User.findOne({
             _id: res.locals.user._id, "characters._id": req.params.characterId
-        }, { $push: {
-              "characters.$.weapons": req.body.weapons,
-        }},{
-          new: true
         })
-
-
-        res.json(oneUser)
-
+        const oneCharacter = oneUser.characters.id(req.params.characterId)
+        const newWeapon = {
+            name: req.body.name,
+            damage: req.body.damage,
+            type: req.body.type,
+            note: req.body.note,
+        }
+        oneCharacter.weapons.push(newWeapon)
+      
+      
+        await oneUser.save()
       } catch(err) {
       console.log(err)
       return res.status(500).json({error: "Server Error"})        
@@ -233,10 +254,9 @@ router.put("/characters/:characterId/weapons/:weaponId", authLockedRoute, async(
             }
         }, { $set: {
               "characters.$[outer].weapons.$[inner].name": req.body.name,
-              "weapons.$.damage": req.body.damage,
-              "weapons.$.type": req.body.type,
-              "weapons.$.note": req.body.note,
-              
+              "characters.$[outer].weapons.$[inner].damage": req.body.damage,
+              "characters.$[outer].weapons.$[inner].type": req.body.type,
+              "characters.$[outer].weapons.$[inner].note": req.body.note,            
         }},{
           "arrayFilters": [
             {"outer._id": req.params.characterId},

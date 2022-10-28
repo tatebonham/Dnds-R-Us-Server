@@ -86,6 +86,18 @@ const CharacterSchema = new mongoose.Schema({
   totalhitdice: {
     type: String
   }, 
+  armor: {
+    type: Number
+  }, 
+  speed: {
+    type: Number
+  }, 
+  initiative: {
+    type: Number
+  }, 
+  inpiration: {
+    type: Number
+  }, 
   currenthitdice: {
     type: Number
   }, 
