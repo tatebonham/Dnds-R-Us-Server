@@ -241,6 +241,43 @@ router.post("/characters/:characterId/weapons", authLockedRoute, async(req,res) 
   }
 })
 
+// Get -- get sepcific weapon
+router.get("/characters/:characterId/weapons/:weaponId", authLockedRoute, async(req,res) => {
+    try {
+        const oneUser = await db.User.findOne({
+        _id: res.locals.user._id, "characters._id": req.params.characterId
+    })
+        const oneCharacter = oneUser.characters.id(req.params.characterId)
+
+        const oneWeapon = oneCharacter.weapons.id(req.params.weaponId)
+
+        res.json(oneWeapon)
+
+
+      } catch(err) {
+      console.log(err)
+      return res.status(500).json({error: "Server Error"})        
+  }
+})
+
+// Delete -- delete specific weapon
+router.delete("/characters/:characterId/weapons/:weaponId", authLockedRoute, async(req,res) => {
+    try {
+        const oneUser = await db.User.findOne({
+        _id: res.locals.user._id, "characters._id": req.params.characterId
+    })
+        const oneCharacter = oneUser.characters.id(req.params.characterId)
+
+        const deleteWeapon = oneCharacter.weapons.id(req.params.weaponId).remove()
+
+        oneUser.save()
+
+      } catch(err) {
+      console.log(err)
+      return res.status(500).json({error: "Server Error"})        
+  }
+})
+
 // Put -- Edit a weapon schema
 router.put("/characters/:characterId/weapons/:weaponId", authLockedRoute, async(req,res) => {
   try {
