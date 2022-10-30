@@ -229,7 +229,7 @@ router.put("/characters/:characterId", authLockedRoute, async(req,res) => {
         "characters.$.religion": req.body.religion,
         "characters.$.sleight": req.body.sleight,
         "characters.$.stealth": req.body.stealth,
-        "characters.$.survivial": req.body.survivial,
+        "characters.$.survival": req.body.survival,
       }
       }, {
         new: true

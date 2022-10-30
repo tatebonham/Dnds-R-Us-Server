@@ -236,7 +236,7 @@ const CharacterSchema = new mongoose.Schema({
   stealth: {
     type: Boolean
   },
-  survivial: {
+  survival: {
     type: Boolean
   },
 }, {timestamps: true})
