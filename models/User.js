@@ -31,6 +31,13 @@ const SpellSchema = new mongoose.Schema({
 }, {
   timestamps: true
 })
+const AttackSchema = new mongoose.Schema({
+  note: {
+    type: String
+  },
+}, {
+  timestamps: true
+})
 
 const CharacterSchema = new mongoose.Schema({
   name: {
@@ -72,17 +79,23 @@ const CharacterSchema = new mongoose.Schema({
   charisma: {
     type: Number
   }, 
-  proficiencies: [],
-  features: [],
+  proficiencies: {
+    type: String
+  },
+  features: {
+    type: String
+  },
   maxhealth: {
     type: Number
   }, 
   currenthealth: {
     type: Number
   }, 
-  attacks: [], 
+  attacks: [AttackSchema],
   skills: [],
-  equipment: [], 
+  equipment: {
+    type: String
+  }, 
   totalhitdice: {
     type: String
   }, 
@@ -171,7 +184,61 @@ const CharacterSchema = new mongoose.Schema({
   }, 
   img_url:{
     type: String
-  }
+  },
+  acrobatics: {
+    type: Boolean
+  },
+  animalhandling: {
+    type: Boolean
+  },
+  arcana: {
+    type: Boolean
+  },
+  athletics: {
+    type: Boolean
+  },
+  deception: {
+    type: Boolean
+  },
+  history: {
+    type: Boolean
+  },
+  insight: {
+    type: Boolean
+  },
+  intimidation: {
+    type: Boolean
+  },
+  investigation: {
+    type: Boolean
+  },
+  medicine: {
+    type: Boolean
+  },
+  nature: {
+    type: Boolean
+  },
+  perception: {
+    type: Boolean
+  },
+  performance: {
+    type: Boolean
+  },
+  persuasion: {
+    type: Boolean
+  },
+  religion: {
+    type: Boolean
+  },
+  sleight: {
+    type: Boolean
+  },
+  stealth: {
+    type: Boolean
+  },
+  survivial: {
+    type: Boolean
+  },
 }, {timestamps: true})
 
 const UserSchema = new mongoose.Schema({

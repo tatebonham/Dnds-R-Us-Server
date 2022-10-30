@@ -150,9 +150,9 @@ router.post("/characters", authLockedRoute, async(req,res) => {
           }
   
           oneUser.characters.push(newCharacter)
-          res.json(oneUser)
   
           await oneUser.save()
+          res.json(oneUser)
   
       } catch(err) {
       console.log(err)
@@ -205,13 +205,36 @@ router.put("/characters/:characterId", authLockedRoute, async(req,res) => {
         "characters.$.currenthealth": req.body.currenthealth,
         "characters.$.totalhitdice": req.body.totalhitdice,
         "characters.$.currenthitdice": req.body.currenthitdice,
+        "characters.$.gold": req.body.gold,
+        "characters.$.silver": req.body.silver,
+        "characters.$.copper": req.body.copper,
+        "characters.$.proficiencies": req.body.proficiencies,
+        "characters.$.features": req.body.features,
+        "characters.$.skills": req.body.skills,
+        "characters.$.equipment": req.body.equipment,
+        "characters.$.acrobatics": req.body.acrobatics,
+        "characters.$.animalhandling": req.body.animalhandling,
+        "characters.$.arcana": req.body.arcana,
+        "characters.$.athletics": req.body.athletics,
+        "characters.$.deception": req.body.deception,
+        "characters.$.history": req.body.history,
+        "characters.$.insight": req.body.insight,
+        "characters.$.intimidation": req.body.intimidation,
+        "characters.$.investigation": req.body.investigation,
+        "characters.$.medicine": req.body.medicine,
+        "characters.$.nature": req.body.nature,
+        "characters.$.perception": req.body.perception,
+        "characters.$.performance": req.body.performance,
+        "characters.$.persuasion": req.body.persuasion,
+        "characters.$.religion": req.body.religion,
+        "characters.$.sleight": req.body.sleight,
+        "characters.$.stealth": req.body.stealth,
+        "characters.$.survivial": req.body.survivial,
       }
       }, {
         new: true
       })
-  
-          res.json(oneUser)
-  
+      res.json(oneUser)
       } catch(err) {
       console.log(err)
       return res.status(500).json({error: "Server Error"})        
@@ -233,8 +256,50 @@ router.post("/characters/:characterId/weapons", authLockedRoute, async(req,res) 
         }
         oneCharacter.weapons.push(newWeapon)
       
+        await oneUser.save()
+        res.json(oneUser)
+      } catch(err) {
+      console.log(err)
+      return res.status(500).json({error: "Server Error"})        
+  }
+})
+
+// Post -- create a new spell schema in character schema
+router.post("/characters/:characterId/spells", authLockedRoute, async(req,res) => {
+  try {
+        const oneUser = await db.User.findOne({
+            _id: res.locals.user._id, "characters._id": req.params.characterId
+        })
+        const oneCharacter = oneUser.characters.id(req.params.characterId)
+        const newSpell = {
+            name: req.body.name,
+            level: req.body.level,
+            note: req.body.note,
+        }
+        oneCharacter.spells.push(newSpell)
       
         await oneUser.save()
+        res.json(oneUser)
+      } catch(err) {
+      console.log(err)
+      return res.status(500).json({error: "Server Error"})        
+  }
+})
+
+// Post -- create a new attack schema in character schema
+router.post("/characters/:characterId/attacks", authLockedRoute, async(req,res) => {
+  try {
+        const oneUser = await db.User.findOne({
+            _id: res.locals.user._id, "characters._id": req.params.characterId
+        })
+        const oneCharacter = oneUser.characters.id(req.params.characterId)
+        const newAttack = {
+            note: req.body.note,
+        }
+        oneCharacter.attacks.push(newAttack)
+      
+        await oneUser.save()
+        res.json(oneUser)
       } catch(err) {
       console.log(err)
       return res.status(500).json({error: "Server Error"})        
@@ -260,6 +325,58 @@ router.get("/characters/:characterId/weapons/:weaponId", authLockedRoute, async(
   }
 })
 
+// Get -- get sepcific spell
+router.get("/characters/:characterId/spells/:spellId", authLockedRoute, async(req,res) => {
+    try {
+        const oneUser = await db.User.findOne({
+        _id: res.locals.user._id, "characters._id": req.params.characterId
+    })
+        const oneCharacter = oneUser.characters.id(req.params.characterId)
+
+        const oneSpell = oneCharacter.spells.id(req.params.spellId)
+
+        res.json(oneSpell)
+
+      } catch(err) {
+      console.log(err)
+      return res.status(500).json({error: "Server Error"})        
+  }
+})
+
+// Get -- get sepcific attack
+router.get("/characters/:characterId/attacks/:attackId", authLockedRoute, async(req,res) => {
+    try {
+        const oneUser = await db.User.findOne({
+        _id: res.locals.user._id, "characters._id": req.params.characterId
+    })
+        const oneCharacter = oneUser.characters.id(req.params.characterId)
+
+        const oneAttack = oneCharacter.attacks.id(req.params.attackId)
+
+        res.json(oneAttack)
+      } catch(err) {
+      console.log(err)
+      return res.status(500).json({error: "Server Error"})        
+  }
+})
+
+// Delete -- delete specific character
+router.delete("/characters/:characterId", authLockedRoute, async(req,res) => {
+    try {
+        const oneUser = await db.User.findOne({
+        _id: res.locals.user._id, "characters._id": req.params.characterId
+    })
+        const oneCharacter = oneUser.characters.id(req.params.characterId).remove()
+
+
+        oneUser.save()
+        res.json(oneCharacter)
+      } catch(err) {
+      console.log(err)
+      return res.status(500).json({error: "Server Error"})        
+  }
+})
+
 // Delete -- delete specific weapon
 router.delete("/characters/:characterId/weapons/:weaponId", authLockedRoute, async(req,res) => {
     try {
@@ -271,7 +388,43 @@ router.delete("/characters/:characterId/weapons/:weaponId", authLockedRoute, asy
         const deleteWeapon = oneCharacter.weapons.id(req.params.weaponId).remove()
 
         oneUser.save()
+        res.json(deleteWeapon)
+      } catch(err) {
+      console.log(err)
+      return res.status(500).json({error: "Server Error"})        
+  }
+})
 
+// Delete -- delete specific spell
+router.delete("/characters/:characterId/spells/:spellId", authLockedRoute, async(req,res) => {
+    try {
+        const oneUser = await db.User.findOne({
+        _id: res.locals.user._id, "characters._id": req.params.characterId
+    })
+        const oneCharacter = oneUser.characters.id(req.params.characterId)
+
+        const deleteSpell = oneCharacter.spells.id(req.params.spellId).remove()
+
+        oneUser.save()
+        res.json(deleteSpell)
+      } catch(err) {
+      console.log(err)
+      return res.status(500).json({error: "Server Error"})        
+  }
+})
+
+// Delete -- delete specific attack
+router.delete("/characters/:characterId/attacks/:attackId", authLockedRoute, async(req,res) => {
+    try {
+        const oneUser = await db.User.findOne({
+        _id: res.locals.user._id, "characters._id": req.params.characterId
+    })
+        const oneCharacter = oneUser.characters.id(req.params.characterId)
+
+        const deleteAttack = oneCharacter.attacks.id(req.params.attackId).remove()
+
+        oneUser.save()
+        res.json(deleteAttack)
       } catch(err) {
       console.log(err)
       return res.status(500).json({error: "Server Error"})        
@@ -301,9 +454,63 @@ router.put("/characters/:characterId/weapons/:weaponId", authLockedRoute, async(
           ]
         })
 
+        res.json(oneUser)
+      } catch(err) {
+      console.log(err)
+      return res.status(500).json({error: "Server Error"})        
+  }
+})
+
+// Put -- Edit a spell schema
+router.put("/characters/:characterId/spells/:spellId", authLockedRoute, async(req,res) => {
+  try {
+        const oneUser = await db.User.updateOne({
+            "_id": res.locals.user._id,
+            "characters": {
+              "$elemMatch": {
+                "_id": req.params.characterId,
+                "spells._id": req.params.spellId
+              }
+            }
+        }, { $set: {
+              "characters.$[outer].spells.$[inner].name": req.body.name,
+              "characters.$[outer].spells.$[inner].level": req.body.level,
+              "characters.$[outer].spells.$[inner].note": req.body.note,            
+        }},{
+          "arrayFilters": [
+            {"outer._id": req.params.characterId},
+            {"inner._id": req.params.spellId}
+          ]
+        })
 
         res.json(oneUser)
+      } catch(err) {
+      console.log(err)
+      return res.status(500).json({error: "Server Error"})        
+  }
+})
 
+// Put -- Edit a attack schema
+router.put("/characters/:characterId/attacks/:attackId", authLockedRoute, async(req,res) => {
+  try {
+        const oneUser = await db.User.updateOne({
+            "_id": res.locals.user._id,
+            "characters": {
+              "$elemMatch": {
+                "_id": req.params.characterId,
+                "attacks._id": req.params.attackId
+              }
+            }
+        }, { $set: {
+              "characters.$[outer].attacks.$[inner].note": req.body.note,            
+        }},{
+          "arrayFilters": [
+            {"outer._id": req.params.characterId},
+            {"inner._id": req.params.attackId}
+          ]
+        })
+
+        res.json(oneUser)
       } catch(err) {
       console.log(err)
       return res.status(500).json({error: "Server Error"})        
