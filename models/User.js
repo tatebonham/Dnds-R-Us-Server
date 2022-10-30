@@ -38,6 +38,27 @@ const AttackSchema = new mongoose.Schema({
 }, {
   timestamps: true
 })
+const EquipmentSchema = new mongoose.Schema({
+  note: {
+    type: String
+  },
+}, {
+  timestamps: true
+})
+const ProfSchema = new mongoose.Schema({
+  note: {
+    type: String
+  },
+}, {
+  timestamps: true
+})
+const FeatureSchema = new mongoose.Schema({
+  note: {
+    type: String
+  },
+}, {
+  timestamps: true
+})
 
 const CharacterSchema = new mongoose.Schema({
   name: {
@@ -79,12 +100,8 @@ const CharacterSchema = new mongoose.Schema({
   charisma: {
     type: Number
   }, 
-  proficiencies: {
-    type: String
-  },
-  features: {
-    type: String
-  },
+  proficiencies: [ProfSchema],
+  features: [FeatureSchema],
   maxhealth: {
     type: Number
   }, 
@@ -92,10 +109,7 @@ const CharacterSchema = new mongoose.Schema({
     type: Number
   }, 
   attacks: [AttackSchema],
-  skills: [],
-  equipment: {
-    type: String
-  }, 
+  equipment: [EquipmentSchema], 
   totalhitdice: {
     type: String
   }, 
