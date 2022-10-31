@@ -122,7 +122,7 @@ const CharacterSchema = new mongoose.Schema({
   initiative: {
     type: Number
   }, 
-  inpiration: {
+  inspiration: {
     type: Number
   }, 
   currenthitdice: {

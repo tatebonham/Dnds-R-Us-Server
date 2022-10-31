@@ -146,7 +146,12 @@ router.post("/characters", authLockedRoute, async(req,res) => {
               race: req.body.race,
               class: req.body.class,
               subclass: req.body.subclass,
-              level: req.body.level
+              level: req.body.level,
+              currenthealth: req.body.currenthealth,
+              maximumhealth: req.body.maximumhealth,
+              temporaryhealth: req.body.temporaryhealth,
+              currenthitdice: req.body.currenthitdice,
+              img_url: req.body.img_url,
           }
   
           oneUser.characters.push(newCharacter)
@@ -199,7 +204,7 @@ router.put("/characters/:characterId", authLockedRoute, async(req,res) => {
         "characters.$.speed": req.body.speed,
         "characters.$.armor": req.body.armor,
         "characters.$.initiative": req.body.initiative,
-        "characters.$.inpiration": req.body.inpiration,
+        "characters.$.inspiration": req.body.inspiration,
         "characters.$.maxhealth": req.body.maxhealth,
         "characters.$.temporaryhealth": req.body.temporaryhealth,
         "characters.$.currenthealth": req.body.currenthealth,
