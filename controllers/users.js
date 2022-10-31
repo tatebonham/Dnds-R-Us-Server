@@ -292,6 +292,7 @@ router.post("/characters/:characterId/attacks", authLockedRoute, async(req,res) 
         const newAttack = {
             note: req.body.note,
         }
+        console.log('newAttack', newAttack)
         oneCharacter.attacks.push(newAttack)
       
         await oneUser.save()
@@ -330,7 +331,8 @@ router.post("/characters/:characterId/profs", authLockedRoute, async(req,res) =>
         const newProf = {
             note: req.body.note,
         }
-        oneCharacter.profs.push(newProf)
+        console.log('prof', newProf)
+        oneCharacter.proficiencies.push(newProf)
       
         await oneUser.save()
         res.json(oneUser)
