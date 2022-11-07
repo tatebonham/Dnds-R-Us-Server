@@ -243,20 +243,56 @@ router.put("/characters/:characterId", authLockedRoute, async(req,res) => {
 })
 
 // Post -- create a new weapon schema in character schema
-router.post("/characters/:characterId/weapons", authLockedRoute, async(req,res) => {
+router.post("/characters/:characterId/:schema", authLockedRoute, async(req,res) => {
   try {
         const oneUser = await db.User.findOne({
             _id: res.locals.user._id, "characters._id": req.params.characterId
         })
         const oneCharacter = oneUser.characters.id(req.params.characterId)
-        const newWeapon = {
-            name: req.body.name,
-            damage: req.body.damage,
-            type: req.body.type,
-            note: req.body.note,
-        }
-        oneCharacter.weapons.push(newWeapon)
-      
+        const schemaType = req.params.schema
+        console.log('Schema test: ', schemaType)
+        const newSchema = () => {
+          if(schemaType === 'weapons'){
+            const item = {
+              name: req.body.name,
+              damage: req.body.damage,
+              type: req.body.type,
+              note: req.body.note,
+            }
+            return oneCharacter.weapons.push(item)
+          } else if(schemaType === 'spells'){
+            const item = {
+              name: req.body.name,
+              level: req.body.level,
+              note: req.body.note,
+            }
+            return oneCharacter.spells.push(item)
+          } else if(schemaType === 'attacks'){
+            const item = {
+              note: req.body.note,
+            }
+            return oneCharacter.attacks.push(item)
+          } else if(schemaType === 'equipment'){
+            const item = {
+              note: req.body.note,
+            }
+            return oneCharacter.equipment.push(item)
+          } else if(schemaType === 'profs'){
+            const item = {
+              note: req.body.note,
+            }
+            return oneCharacter.proficiencies.push(item)
+          } else if(schemaType === 'features'){
+            const item = {
+              note: req.body.note,
+            }
+            return oneCharacter.features.push(item)
+          }
+      }
+          
+        
+        
+        newSchema()
         await oneUser.save()
         res.json(oneUser)
       } catch(err) {
