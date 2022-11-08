@@ -354,105 +354,38 @@ router.delete("/characters/:characterId", authLockedRoute, async(req,res) => {
   }
 })
 
-// Delete -- delete specific weapon
-router.delete("/characters/:characterId/weapons/:weaponId", authLockedRoute, async(req,res) => {
+// Delete -- delete specific schema
+router.delete("/characters/:characterId/:schema/:schemaId", authLockedRoute, async(req,res) => {
     try {
         const oneUser = await db.User.findOne({
         _id: res.locals.user._id, "characters._id": req.params.characterId
     })
         const oneCharacter = oneUser.characters.id(req.params.characterId)
+        const schemaType = req.params.schema
+        const oneSchema = ()=>{
+          if(schemaType === 'weapons'){
+            const oneWeapon = oneCharacter.weapons.id(req.params.schemaId).remove()
+            return res.json(oneWeapon)
+          } else if(schemaType === 'spells'){
+            const oneSpell = oneCharacter.spells.id(req.params.schemaId).remove()
+            return res.json(oneSpell)
+          } else if(schemaType === 'attacks'){
+            const oneSpell = oneCharacter.attacks.id(req.params.schemaId).remove()
+            return res.json(oneSpell)
+          } else if(schemaType === 'equipment'){
+            const oneSpell = oneCharacter.equipment.id(req.params.schemaId).remove()
+            return res.json(oneSpell)
+          } else if(schemaType === 'profs'){
+            const oneSpell = oneCharacter.proficiencies.id(req.params.schemaId).remove()
+            return res.json(oneSpell)
+          } else if(schemaType === 'features'){
+            const oneSpell = oneCharacter.features.id(req.params.schemaId).remove()
+            return res.json(oneSpell)
+          }
+        }
 
-        const deleteWeapon = oneCharacter.weapons.id(req.params.weaponId).remove()
-
+        oneSchema()
         oneUser.save()
-        res.json(deleteWeapon)
-      } catch(err) {
-      console.log(err)
-      return res.status(500).json({error: "Server Error"})        
-  }
-})
-
-// Delete -- delete specific spell
-router.delete("/characters/:characterId/spells/:spellId", authLockedRoute, async(req,res) => {
-    try {
-        const oneUser = await db.User.findOne({
-        _id: res.locals.user._id, "characters._id": req.params.characterId
-    })
-        const oneCharacter = oneUser.characters.id(req.params.characterId)
-
-        const deleteSpell = oneCharacter.spells.id(req.params.spellId).remove()
-
-        oneUser.save()
-        res.json(deleteSpell)
-      } catch(err) {
-      console.log(err)
-      return res.status(500).json({error: "Server Error"})        
-  }
-})
-
-// Delete -- delete specific attack
-router.delete("/characters/:characterId/attacks/:attackId", authLockedRoute, async(req,res) => {
-    try {
-        const oneUser = await db.User.findOne({
-        _id: res.locals.user._id, "characters._id": req.params.characterId
-    })
-        const oneCharacter = oneUser.characters.id(req.params.characterId)
-
-        const deleteAttack = oneCharacter.attacks.id(req.params.attackId).remove()
-
-        oneUser.save()
-        res.json(deleteAttack)
-      } catch(err) {
-      console.log(err)
-      return res.status(500).json({error: "Server Error"})        
-  }
-})
-// Delete -- delete specific equipment
-router.delete("/characters/:characterId/equipment/:equipmentId", authLockedRoute, async(req,res) => {
-    try {
-        const oneUser = await db.User.findOne({
-        _id: res.locals.user._id, "characters._id": req.params.characterId
-    })
-        const oneCharacter = oneUser.characters.id(req.params.characterId)
-
-        const deleteEquipment = oneCharacter.equipment.id(req.params.equipmentId).remove()
-
-        oneUser.save()
-        res.json(deleteEquipment)
-      } catch(err) {
-      console.log(err)
-      return res.status(500).json({error: "Server Error"})        
-  }
-})
-// Delete -- delete specific prof
-router.delete("/characters/:characterId/profs/:profId", authLockedRoute, async(req,res) => {
-    try {
-        const oneUser = await db.User.findOne({
-        _id: res.locals.user._id, "characters._id": req.params.characterId
-    })
-        const oneCharacter = oneUser.characters.id(req.params.characterId)
-
-        const deleteProf = oneCharacter.proficiencies.id(req.params.profId).remove()
-
-        oneUser.save()
-        res.json(deleteProf)
-      } catch(err) {
-      console.log(err)
-      return res.status(500).json({error: "Server Error"})        
-  }
-})
-// Delete -- delete specific feature
-router.delete("/characters/:characterId/features/:featureId", authLockedRoute, async(req,res) => {
-    try {
-        const oneUser = await db.User.findOne({
-        _id: res.locals.user._id, "characters._id": req.params.characterId
-    })
-        const oneCharacter = oneUser.characters.id(req.params.characterId)
-
-        const deleteFeature = oneCharacter.features.id(req.params.featureId).remove()
-
-        oneUser.save()
-        res.json(deleteFeature)
       } catch(err) {
       console.log(err)
       return res.status(500).json({error: "Server Error"})        
