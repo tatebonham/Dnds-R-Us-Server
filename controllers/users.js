@@ -242,7 +242,7 @@ router.put("/characters/:characterId", authLockedRoute, async(req,res) => {
   }
 })
 
-// Post -- create a new weapon schema in character schema
+// Post -- create a new req.params.schema  in character schema
 router.post("/characters/:characterId/:schema", authLockedRoute, async(req,res) => {
   try {
         const oneUser = await db.User.findOne({
@@ -250,7 +250,6 @@ router.post("/characters/:characterId/:schema", authLockedRoute, async(req,res) 
         })
         const oneCharacter = oneUser.characters.id(req.params.characterId)
         const schemaType = req.params.schema
-        console.log('Schema test: ', schemaType)
         const newSchema = () => {
           if(schemaType === 'weapons'){
             const item = {
@@ -289,8 +288,6 @@ router.post("/characters/:characterId/:schema", authLockedRoute, async(req,res) 
             return oneCharacter.features.push(item)
           }
       }
-          
-        
         
         newSchema()
         await oneUser.save()
@@ -301,203 +298,39 @@ router.post("/characters/:characterId/:schema", authLockedRoute, async(req,res) 
   }
 })
 
-// Post -- create a new spell schema in character schema
-router.post("/characters/:characterId/spells", authLockedRoute, async(req,res) => {
-  try {
+// Get -- get sepcific schema data
+router.get("/characters/:characterId/:schema/:schemaId", authLockedRoute, async(req,res) => {
+    try {
         const oneUser = await db.User.findOne({
-            _id: res.locals.user._id, "characters._id": req.params.characterId
+          _id: res.locals.user._id, "characters._id": req.params.characterId
         })
         const oneCharacter = oneUser.characters.id(req.params.characterId)
-        const newSpell = {
-            name: req.body.name,
-            level: req.body.level,
-            note: req.body.note,
+        const schemaType = req.params.schema
+        const oneSchema = ()=>{
+          if(schemaType === 'weapons'){
+            const oneWeapon = oneCharacter.weapons.id(req.params.schemaId)
+            return res.json(oneWeapon)
+          } else if(schemaType === 'spells'){
+            const oneSpell = oneCharacter.spells.id(req.params.schemaId)
+            return res.json(oneSpell)
+          } else if(schemaType === 'attacks'){
+            const oneSpell = oneCharacter.attacks.id(req.params.schemaId)
+            return res.json(oneSpell)
+          } else if(schemaType === 'equipment'){
+            const oneSpell = oneCharacter.equipment.id(req.params.schemaId)
+            return res.json(oneSpell)
+          } else if(schemaType === 'profs'){
+            const oneSpell = oneCharacter.proficiencies.id(req.params.schemaId)
+            return res.json(oneSpell)
+          } else if(schemaType === 'features'){
+            const oneSpell = oneCharacter.features.id(req.params.schemaId)
+            return res.json(oneSpell)
+          }
         }
-        oneCharacter.spells.push(newSpell)
-      
-        await oneUser.save()
-        res.json(oneUser)
-      } catch(err) {
-      console.log(err)
-      return res.status(500).json({error: "Server Error"})        
-  }
-})
-
-// Post -- create a new attack schema in character schema
-router.post("/characters/:characterId/attacks", authLockedRoute, async(req,res) => {
-  try {
-        const oneUser = await db.User.findOne({
-            _id: res.locals.user._id, "characters._id": req.params.characterId
-        })
-        const oneCharacter = oneUser.characters.id(req.params.characterId)
-        const newAttack = {
-            note: req.body.note,
-        }
-        console.log('newAttack', newAttack)
-        oneCharacter.attacks.push(newAttack)
-      
-        await oneUser.save()
-        res.json(oneUser)
-      } catch(err) {
-      console.log(err)
-      return res.status(500).json({error: "Server Error"})        
-  }
-})
-// Post -- create a new equipment schema in character schema
-router.post("/characters/:characterId/equipment", authLockedRoute, async(req,res) => {
-  try {
-        const oneUser = await db.User.findOne({
-            _id: res.locals.user._id, "characters._id": req.params.characterId
-        })
-        const oneCharacter = oneUser.characters.id(req.params.characterId)
-        const newEquipment = {
-            note: req.body.note,
-        }
-        oneCharacter.equipment.push(newEquipment)
-      
-        await oneUser.save()
-        res.json(oneUser)
-      } catch(err) {
-      console.log(err)
-      return res.status(500).json({error: "Server Error"})        
-  }
-})
-// Post -- create a new prof schema in character schema
-router.post("/characters/:characterId/profs", authLockedRoute, async(req,res) => {
-  try {
-        const oneUser = await db.User.findOne({
-            _id: res.locals.user._id, "characters._id": req.params.characterId
-        })
-        const oneCharacter = oneUser.characters.id(req.params.characterId)
-        const newProf = {
-            note: req.body.note,
-        }
-        console.log('prof', newProf)
-        oneCharacter.proficiencies.push(newProf)
-      
-        await oneUser.save()
-        res.json(oneUser)
-      } catch(err) {
-      console.log(err)
-      return res.status(500).json({error: "Server Error"})        
-  }
-})
-// Post -- create a new feature schema in character schema
-router.post("/characters/:characterId/features", authLockedRoute, async(req,res) => {
-  try {
-        const oneUser = await db.User.findOne({
-            _id: res.locals.user._id, "characters._id": req.params.characterId
-        })
-        const oneCharacter = oneUser.characters.id(req.params.characterId)
-        const newFeature = {
-            note: req.body.note,
-        }
-        oneCharacter.features.push(newFeature)
-      
-        await oneUser.save()
-        res.json(oneUser)
-      } catch(err) {
-      console.log(err)
-      return res.status(500).json({error: "Server Error"})        
-  }
-})
-
-// Get -- get sepcific weapon
-router.get("/characters/:characterId/weapons/:weaponId", authLockedRoute, async(req,res) => {
-    try {
-        const oneUser = await db.User.findOne({
-        _id: res.locals.user._id, "characters._id": req.params.characterId
-    })
-        const oneCharacter = oneUser.characters.id(req.params.characterId)
-
-        const oneWeapon = oneCharacter.weapons.id(req.params.weaponId)
-
-        res.json(oneWeapon)
 
 
-      } catch(err) {
-      console.log(err)
-      return res.status(500).json({error: "Server Error"})        
-  }
-})
+       oneSchema()
 
-// Get -- get sepcific spell
-router.get("/characters/:characterId/spells/:spellId", authLockedRoute, async(req,res) => {
-    try {
-        const oneUser = await db.User.findOne({
-        _id: res.locals.user._id, "characters._id": req.params.characterId
-    })
-        const oneCharacter = oneUser.characters.id(req.params.characterId)
-
-        const oneSpell = oneCharacter.spells.id(req.params.spellId)
-
-        res.json(oneSpell)
-
-      } catch(err) {
-      console.log(err)
-      return res.status(500).json({error: "Server Error"})        
-  }
-})
-
-// Get -- get sepcific attack
-router.get("/characters/:characterId/attacks/:attackId", authLockedRoute, async(req,res) => {
-    try {
-        const oneUser = await db.User.findOne({
-        _id: res.locals.user._id, "characters._id": req.params.characterId
-    })
-        const oneCharacter = oneUser.characters.id(req.params.characterId)
-
-        const oneAttack = oneCharacter.attacks.id(req.params.attackId)
-
-        res.json(oneAttack)
-      } catch(err) {
-      console.log(err)
-      return res.status(500).json({error: "Server Error"})        
-  }
-})
-// Get -- get sepcific equipment
-router.get("/characters/:characterId/equipment/:equipmentId", authLockedRoute, async(req,res) => {
-    try {
-        const oneUser = await db.User.findOne({
-        _id: res.locals.user._id, "characters._id": req.params.characterId
-    })
-        const oneCharacter = oneUser.characters.id(req.params.characterId)
-
-        const oneEquipment = oneCharacter.equipment.id(req.params.equipmentId)
-
-        res.json(oneEquipment)
-      } catch(err) {
-      console.log(err)
-      return res.status(500).json({error: "Server Error"})        
-  }
-})
-// Get -- get sepcific Prof
-router.get("/characters/:characterId/profs/:profId", authLockedRoute, async(req,res) => {
-    try {
-        const oneUser = await db.User.findOne({
-        _id: res.locals.user._id, "characters._id": req.params.characterId
-    })
-        const oneCharacter = oneUser.characters.id(req.params.characterId)
-
-        const oneProf = oneCharacter.proficiencies.id(req.params.profId)
-
-        res.json(oneProf)
-      } catch(err) {
-      console.log(err)
-      return res.status(500).json({error: "Server Error"})        
-  }
-})
-// Get -- get sepcific feature
-router.get("/characters/:characterId/features/:featureId", authLockedRoute, async(req,res) => {
-    try {
-        const oneUser = await db.User.findOne({
-        _id: res.locals.user._id, "characters._id": req.params.characterId
-    })
-        const oneCharacter = oneUser.characters.id(req.params.characterId)
-
-        const oneFeature = oneCharacter.features.id(req.params.featureId)
-
-        res.json(oneFeature)
       } catch(err) {
       console.log(err)
       return res.status(500).json({error: "Server Error"})        
